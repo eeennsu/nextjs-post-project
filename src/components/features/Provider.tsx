@@ -1,13 +1,17 @@
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-const Provider: FC = () => {
+type Props = {
+    session: Session
+}
 
-
+const Provider: FC<PropsWithChildren<Props>> = ({ session, children }) => {
 
     return (
-        <div>
-            Provider
-        </div>
+        <SessionProvider session={session}>
+            {children}
+        </SessionProvider>
     );
 };
 
