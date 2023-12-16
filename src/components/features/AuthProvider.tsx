@@ -8,7 +8,7 @@ type Props = {
     session?: Session | null | undefined;
 }
 
-const Provider: FC<PropsWithChildren<Props>> = ({ children, session }) => {
+const AuthProvider: FC<PropsWithChildren<Props>> = ({ children, session }) => {
 
     return (
         <SessionProvider session={session}>
@@ -17,4 +17,4 @@ const Provider: FC<PropsWithChildren<Props>> = ({ children, session }) => {
     );
 };
 
-export default Provider;
+export default AuthProvider;

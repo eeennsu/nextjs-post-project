@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 import { connectToDB } from '@/db/db';
 import User from '@/models/User';
+import env from '../../../../../env';
 
 const handler = NextAuth({
     // Configure one or more authentication providers
@@ -13,8 +14,8 @@ const handler = NextAuth({
     // ],
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
         }),
     ],
     
@@ -24,7 +25,7 @@ const handler = NextAuth({
             const userWithId = {
                 ...session.user,
                 id: sessionUser._id.toString()
-            }
+            };
         
             return {
                 ...session,
