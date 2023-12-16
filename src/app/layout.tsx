@@ -1,9 +1,8 @@
 import type { Metadata, NextPage } from 'next'
 import type { PropsWithChildren } from 'react';
-import '@/styles/globals.css';
-
 import Header from '@/components/features/Header';
 import Provider from '@/components/features/Provider';
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'My Next Toy App',
@@ -15,7 +14,7 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
     return (
         <html lang='en'>
             <body>
-                {/* <Provider> */}
+                <Provider>
                     <div className='background'>
                         <div className='gradient' />
                     </div>
@@ -23,7 +22,7 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
                         <Header />
                         {children}
                     </div>
-                {/* </Provider> */}
+                </Provider>
             </body>
         </html>
     );

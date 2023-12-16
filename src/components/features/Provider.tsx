@@ -1,12 +1,14 @@
+'use client';
+
 import type { FC, PropsWithChildren } from 'react';
 import { SessionProvider } from 'next-auth/react';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 
 type Props = {
-    session: Session
+    session?: Session | null | undefined;
 }
 
-const Provider: FC<PropsWithChildren<Props>> = ({ session, children }) => {
+const Provider: FC<PropsWithChildren<Props>> = ({ children, session }) => {
 
     return (
         <SessionProvider session={session}>

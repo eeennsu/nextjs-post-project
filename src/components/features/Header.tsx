@@ -7,19 +7,22 @@ import { useState, useEffect } from 'react';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 import type { LiteralUnion, ClientSafeProvider } from 'next-auth/react';
 import { BuiltInProviderType } from 'next-auth/providers/index';
+import LoadingAuth from './LoadingAuth';
 
 const Header: FC = () => {
 
-    // const { data: session, status } = useSession();
+    const { data: session, status } = useSession();
     const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null);
     const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
     useEffect(() => {
         getProviders()
-            .then(res => {
-                setProviders(res)
-            });
+            .then(res => setProviders(res));
     }, []);
+
+    useEffect(() => {
+        session && console.log(session);
+    }, [session]);
 
     const handleToggleDropdown = () => {
         setToggleDropdown(prev => !prev);
@@ -45,7 +48,19 @@ const Header: FC = () => {
                 {/* desktop */}
                 <div className='hidden sm:flex' role='desktop-menu'>
                     {
-                        true ? (
+                        status === 'loading' ? (
+                            <LoadingAuth />
+                        ) : status === 'unauthenticated' ? (
+                            providers && Object.values(providers!).map((provider) => (
+                                <button 
+                                    key={provider.name} 
+                                    className='black_btn' 
+                                    onClick={() => signIn(provider.id)}
+                                >
+                                    Login
+                                </button>
+                            ))
+                        ) : (
                             <div className='flex gap-3 md:gap-5'>
                                 <Link href='/create-post' className='black_btn'>
                                     Create Post
@@ -56,59 +71,43 @@ const Header: FC = () => {
                                 </button>
 
                                 <Link href='/profile'>
-                                    <Image src='/assets/images/logo.svg' alt='profile' width={37} height={37} />
+                                    <Image src={session?.user?.image || '/assets/images/logo.svg'} alt='profile' width={37} height={37} />
                                 </Link>
                             </div>
-                        ) : (
-                            <>
-                                {
-                                    providers && Object.values(providers!).map((provider) => (
-                                        <button 
-                                            key={provider.name} 
-                                            className='black_btn' 
-                                            onClick={() => signIn(provider.id)}
-                                        >
-                                            Login
-                                        </button>
-                                    ))
-                                }
-                            </>
                         )
                     }
                 </div>
-
+                
                 {/* mobile */}
                 <div className='relative flex sm:hidden'>
                     {
-                        true ? (
-                            <div className='flex'>
-                                <Image src='/assets/images/logo.svg' alt='profile' className='object-contain cursor-pointer' width={37} height={37} onClick={handleToggleDropdown}/>
-                                {
-                                    toggleDropdown && (
-                                        <div className='dropdown'>
-                                            <Link className='dropdown_link' href='/profile' onClick={handleCloseropdown}>
-                                                My Profile
-                                            </Link>
-                                            <Link className='dropdown_link' href='/create-post' onClick={handleCloseropdown}>
-                                                Create Post
-                                            </Link>
-                                            <button className='w-full mt-5 black_btn' onClick={handleMobileSignOut}>
-                                                Logout
-                                            </button>
-                                        </div>
-                                    )
-                                }
-                            </div>
+                        status === 'loading' ? (
+                            <LoadingAuth />
+                        ) : status === 'unauthenticated' ? (
+                            providers && Object.values(providers!).map((provider) => (
+                                <button key={provider.name} onClick={() => signIn(provider.id)} className='black_btn'>
+                                    Login
+                                </button>
+                            ))
                         ) : (
-                            <>
-                                {
-                                    providers && Object.values(providers!).map((provider) => (
-                                        <button key={provider.name} onClick={() => signIn(provider.id)} className='black_btn'>
-                                            Login
+                            <div className='flex'>
+                            <Image src='/assets/images/logo.svg' alt='profile' className='object-contain cursor-pointer' width={37} height={37} onClick={handleToggleDropdown}/>
+                            {
+                                toggleDropdown && (
+                                    <div className='dropdown'>
+                                        <Link className='dropdown_link' href='/profile' onClick={handleCloseropdown}>
+                                            My Profile
+                                        </Link>
+                                        <Link className='dropdown_link' href='/create-post' onClick={handleCloseropdown}>
+                                            Create Post
+                                        </Link>
+                                        <button className='w-full mt-5 black_btn' onClick={handleMobileSignOut}>
+                                            Logout
                                         </button>
-                                    ))
-                                }
-                            </>
+                                    </div>
+                                )
+                            }
+                            </div>
                         )
                     }
                 </div>
