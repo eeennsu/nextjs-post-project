@@ -36,7 +36,7 @@ const Header: FC = () => {
         handleCloseropdown();
         signOut();
     }
-    
+
     return (
         <header className='w-full pt-3 mb-16'>
             <nav className='w-full flex-between'>
@@ -60,18 +60,18 @@ const Header: FC = () => {
                                     Login
                                 </button>
                             ))
-                        ) : (
-                            <div className='flex gap-3 md:gap-5'>
+                        ) : (     
+                            <div className='flex gap-3 md:gap-4'>
                                 <Link href='/create-post' className='black_btn'>
                                     Create Post
                                 </Link>
-
+                            
                                 <button onClick={() => signOut()} className='outline_btn'>
                                     Logout
                                 </button>
-
-                                <Link href='/profile'>
-                                    <Image src={session?.user?.image || '/assets/images/logo.svg'} alt='profile' width={37} height={37} />
+                            
+                                <Link href='/profile'>                                    
+                                    <Image src={session?.user?.image || '/assets/images/logo.svg'} alt='profile' width={38} height={38} className='transition rounded-full hover:shadow-xl' />
                                 </Link>
                             </div>
                         )
@@ -81,33 +81,31 @@ const Header: FC = () => {
                 {/* mobile */}
                 <div className='relative flex sm:hidden'>
                     {
-                        status === 'loading' ? (
-                            <LoadingAuth />
-                        ) : status === 'unauthenticated' ? (
+                        session?.user ?  (
+                            <div className='flex'>
+                                <Image src='/assets/images/logo.svg' alt='profile' className='object-contain cursor-pointer' width={37} height={37} onClick={handleToggleDropdown}/>
+                                {
+                                    toggleDropdown && (
+                                        <div className='dropdown'>
+                                            <Link className='dropdown_link' href='/profile' onClick={handleCloseropdown}>
+                                                My Profile
+                                            </Link>
+                                            <Link className='dropdown_link' href='/create-post' onClick={handleCloseropdown}>
+                                                Create Post
+                                            </Link>
+                                            <button className='w-full mt-5 black_btn' onClick={handleMobileSignOut}>
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        ) : (
                             providers && Object.values(providers!).map((provider) => (
                                 <button key={provider.name} onClick={() => signIn(provider.id)} className='black_btn'>
                                     Login
                                 </button>
                             ))
-                        ) : (
-                            <div className='flex'>
-                            <Image src='/assets/images/logo.svg' alt='profile' className='object-contain cursor-pointer' width={37} height={37} onClick={handleToggleDropdown}/>
-                            {
-                                toggleDropdown && (
-                                    <div className='dropdown'>
-                                        <Link className='dropdown_link' href='/profile' onClick={handleCloseropdown}>
-                                            My Profile
-                                        </Link>
-                                        <Link className='dropdown_link' href='/create-post' onClick={handleCloseropdown}>
-                                            Create Post
-                                        </Link>
-                                        <button className='w-full mt-5 black_btn' onClick={handleMobileSignOut}>
-                                            Logout
-                                        </button>
-                                    </div>
-                                )
-                            }
-                            </div>
                         )
                     }
                 </div>
