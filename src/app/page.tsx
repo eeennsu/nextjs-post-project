@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Feed from '@/components/features/Feed';
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage = async () => {
 
     return (
         <main className='flex-col w-full flex-center'>

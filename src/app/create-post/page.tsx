@@ -1,8 +1,5 @@
 import type { Metadata, NextPage } from 'next';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Form from '@/components/features/Form';
-import { usePostContext } from '@/context/PostProvider';
 
 export const metadata: Metadata = {
     title: 'Create Post',
@@ -11,13 +8,9 @@ export const metadata: Metadata = {
 
 const CreatePostPage: NextPage = () => {
 
-    const handleSubmit = () => {
-
-    }
-
     return (
         <Form 
-            type='Create'
+            type='create'
         />
     );
 };

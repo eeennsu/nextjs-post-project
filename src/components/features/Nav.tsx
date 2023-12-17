@@ -4,15 +4,16 @@ import type { FC } from 'react';
 import type { LiteralUnion, ClientSafeProvider } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { BuiltInProviderType } from 'next-auth/providers/index';
-import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
+import { signIn, signOut, getProviders } from 'next-auth/react';
+import { toast } from 'react-toastify';
 import Link from 'next/link';
 import Image from 'next/image';
 import MainLogo from './MainLogo';
-import Loading from '../commons/Loading';
+import useSessionWithUserId from '@/hooks/auth/useSessionWithUserId';
 
 const Nav: FC = () => {
 
-    const { data: session, status } = useSession();
+    const { session } = useSessionWithUserId();
     const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null);
     const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
@@ -20,10 +21,6 @@ const Nav: FC = () => {
         getProviders()
             .then(res => setProviders(res));
     }, []);
-
-    useEffect(() => {
-        session && console.log(session);
-    }, [session]);
 
     const handleToggleDropdown = () => {
         setToggleDropdown(prev => !prev);
@@ -33,26 +30,34 @@ const Nav: FC = () => {
         setToggleDropdown(false);
     }
 
+    const handleLogin = (id: string) => {
+        toast.loading('Login...');
+        signIn(id);
+    }
+
+    const handleLogout = () => {
+        toast.loading('Logout...');
+        signOut();
+    }
+
     const handleMobileSignOut = () => {
+        toast.loading('Logout...');
         handleCloseropdown();
         signOut();
     }
 
     return (
         <nav className='w-full flex-between'>
-            <MainLogo />
-
+            <MainLogo />     
             {/* desktop */}
             <div className='hidden sm:flex' role='desktop-menu'>
                 {
-                    status === 'loading' ? (
-                        <Loading />
-                    ) : status === 'unauthenticated' ? (
+                    !session?.user ? (
                         providers && Object.values(providers!).map((provider) => (
                             <button 
                                 key={provider.name} 
                                 className='black_btn' 
-                                onClick={() => signIn(provider.id)}
+                                onClick={() => handleLogin(provider.id)}
                             >
                                 Login
                             </button>
@@ -63,7 +68,7 @@ const Nav: FC = () => {
                                 Create Post
                             </Link>
                         
-                            <button onClick={() => signOut()} className='outline_btn'>
+                            <button onClick={handleLogout} className='outline_btn'>
                                 Logout
                             </button>
                         
@@ -78,7 +83,13 @@ const Nav: FC = () => {
             {/* mobile */}
             <div className='relative flex sm:hidden'>
                 {
-                    session?.user ?  (
+                    !session?.user ? (
+                        providers && Object.values(providers!).map((provider) => (
+                            <button key={provider.name} onClick={() => handleLogin(provider.id)} className='black_btn'>
+                                Login
+                            </button>
+                        ))
+                    ) : (
                         <div className='flex'>
                             <Image src='/assets/images/logo.svg' alt='profile' className='object-contain cursor-pointer' width={37} height={37} onClick={handleToggleDropdown}/>
                             {
@@ -97,12 +108,6 @@ const Nav: FC = () => {
                                 )
                             }
                         </div>
-                    ) : (
-                        providers && Object.values(providers!).map((provider) => (
-                            <button key={provider.name} onClick={() => signIn(provider.id)} className='black_btn'>
-                                Login
-                            </button>
-                        ))
                     )
                 }
             </div>

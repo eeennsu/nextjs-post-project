@@ -1,11 +1,12 @@
 'use client';
 
 import type { ChangeEvent, FC, FormEvent } from 'react';
+import type { CreateNewPost } from '@/types/postTypes';
+import type { SessionWithUserId } from '@/types/apiTypes';
 import { usePostContext } from '@/context/PostProvider';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
-import { createNewPost_API } from '@/axios/postApis';
-import { CreateNewPost, SessionUserWithId } from '@/types/apiTypes';
+import { createNewPost_API } from '@/lib/postApis';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -15,7 +16,8 @@ type Props = {
 
 const Form: FC<Props> = ({ type }) => {
 
-    const { data: session } = useSession();
+    const { data } = useSession();
+    const session: SessionWithUserId = data; 
     const { post, setPost, submitting, setSubmitting } = usePostContext();
     const router = useRouter();
     
@@ -29,41 +31,50 @@ const Form: FC<Props> = ({ type }) => {
     const handleTagsChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPost(prev => ({
             ...prev!,
-            tag: [...prev!.tag, e.target.value]
-        }));      
+            tags: e.target.value
+        }));
     }
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setSubmitting(true);
-
+        // setSubmitting(true);
+    
         if (!session?.user) {
             toast.warn('Not Found User.');
             return;
         }
 
-        if (!post?.prompt || post.tag.length <= 0) {
+        if (!post?.prompt || post.tags.length <= 0) {
             toast.warn("It doesen't have post");
             return;
         }
 
+        if (!post.tags.startsWith('#')) {
+            toast.warn('#으로 태그를 시작해주세요');
+            return;
+        }
+    
         switch(type) {
             case 'create': createNewPost(); break;
         }
     }
 
     const createNewPost = async () => {
+
+        const _tags = post.tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
+
         const postInfo: CreateNewPost = {
-            prompt: post!.prompt,
-            tag: post!.tag,
-            userId: session?.user!.id
+            prompt: post!.prompt.trim(),
+            tags: _tags,
+            userId: session?.user?.id!
         };
 
         try {
-            const { data } = await createNewPost_API(postInfo);
+            const data = await createNewPost_API(postInfo);
 
             if (data) {
                 console.log(data);
+                toast.success('create new post successfully!');
             } else {
                 toast.error('Failed new Post.');
             }
@@ -98,10 +109,10 @@ const Form: FC<Props> = ({ type }) => {
                 <label>
                     <span className='text-base font-semibold text-gray-700 font-satoshi'>
                         Tag
-                        <span className='ml-3 italic font-normal opacity-75'>(#product, #webdevlopment, #idea)</span>
+                        <span className='ml-3 italic font-normal opacity-75'>(#product #webdevlopment #idea)</span>
                     </span>
                     <input 
-                        value={post?.tag}
+                        value={post?.tags}
                         onChange={handleTagsChange}
                         placeholder='#tag'
                         required
@@ -122,5 +133,3 @@ const Form: FC<Props> = ({ type }) => {
 }
 
 export default Form;
-
-

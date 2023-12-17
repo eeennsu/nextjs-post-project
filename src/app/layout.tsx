@@ -3,8 +3,9 @@ import type { PropsWithChildren } from 'react';
 import { ToastContainer } from 'react-toastify';
 import Header from '@/components/features/Header';
 import AuthProvider from '@/components/features/AuthProvider';
-import '@/styles/globals.css';
 import PostProvider from '@/context/PostProvider';
+import '@/styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: 'My Next Post App',
@@ -25,7 +26,11 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
                             <Header />
                             {children}
                         </div>
-                        <ToastContainer />
+                        <ToastContainer 
+                            position='top-center'
+                            draggable
+                            theme='light'
+                        />
                     </PostProvider>                    
                 </AuthProvider>
             </body>

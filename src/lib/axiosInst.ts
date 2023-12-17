@@ -1,8 +1,7 @@
 import axios from 'axios';
-import env from '../../env';
 
 const axiosInst = axios.create({
-    baseURL: `${env.NEXTAUTH_URL}/api`
+    baseURL: `${process.env.NEXTAUTH_URL_INTERNAL}/api`
 });
 
 export default axiosInst;

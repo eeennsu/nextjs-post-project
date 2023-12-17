@@ -11,7 +11,7 @@ const PostSchema = new Schema({
         required: [true, 'Prompt is required.'],
     },
 
-    tag: {
+    tags: {
         type: [String],
         required: [true, 'Tag is required.'],
     }

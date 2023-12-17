@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import env from '../../env';
 
 let isConnected: boolean = false;
 
@@ -14,7 +13,7 @@ export const connectToDB = async () => {
     }
 
     try {
-        await mongoose.connect(env.MONGO_DB_URL, {
+        await mongoose.connect(process.env.MONGO_DB_URL as string, {
             dbName: 'NextJs-post',
         });
 
