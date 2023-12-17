@@ -80,6 +80,7 @@ const Form: FC<Props> = ({ type }) => {
             }
         } catch (error) {
             console.log(error);
+            toast.error('Failed new Post.');
         } finally {
             setSubmitting(false);
             router.push('/');

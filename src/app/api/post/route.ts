@@ -1,6 +1,6 @@
 import { connectToDB } from '@/db/db';
-import Post from '@/models/Post';
 import { NextResponse, type NextRequest } from 'next/server';
+import Post from '@/models/Post';
 
 export async function GET(req: NextRequest) {
     try {
