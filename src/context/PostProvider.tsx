@@ -1,6 +1,6 @@
 'use client';
 
-import { Post } from '@/types/postType';
+import { Post } from '@/types/postTypes';
 import { FC, PropsWithChildren, Dispatch, createContext, useState, SetStateAction, useContext } from 'react';
 
 export type PostContextType = {

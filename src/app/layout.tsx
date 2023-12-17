@@ -1,5 +1,6 @@
 import type { Metadata, NextPage } from 'next'
 import type { PropsWithChildren } from 'react';
+import { ToastContainer } from 'react-toastify';
 import Header from '@/components/features/Header';
 import AuthProvider from '@/components/features/AuthProvider';
 import '@/styles/globals.css';
@@ -24,6 +25,7 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
                             <Header />
                             {children}
                         </div>
+                        <ToastContainer />
                     </PostProvider>                    
                 </AuthProvider>
             </body>

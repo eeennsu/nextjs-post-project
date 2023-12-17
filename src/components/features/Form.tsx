@@ -3,16 +3,21 @@
 import type { ChangeEvent, FC, FormEvent } from 'react';
 import { usePostContext } from '@/context/PostProvider';
 import { toast } from 'react-toastify';
-import axiosInst from '@/axios/axiosInst';
+import { useSession } from 'next-auth/react';
+import { createNewPost_API } from '@/axios/postApis';
+import { CreateNewPost, SessionUserWithId } from '@/types/apiTypes';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 type Props = {
-    type: any;
+    type: 'create';
 }
 
 const Form: FC<Props> = ({ type }) => {
 
+    const { data: session } = useSession();
     const { post, setPost, submitting, setSubmitting } = usePostContext();
+    const router = useRouter();
     
     const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setPost(prev => ({
@@ -32,22 +37,41 @@ const Form: FC<Props> = ({ type }) => {
         e.preventDefault();
         setSubmitting(true);
 
-        if (!post) {
-            toast("It doesen't have post");
+        if (!session?.user) {
+            toast.warn('Not Found User.');
             return;
         }
 
-        try {
-            const { data } = await axiosInst.post('/post', post);
-            // if (post?.prompt) {
-            //     const { data } = await axiosInst.post('/post', post);
-            // } else {
+        if (!post?.prompt || post.tag.length <= 0) {
+            toast.warn("It doesen't have post");
+            return;
+        }
 
-            // }
+        switch(type) {
+            case 'create': createNewPost(); break;
+        }
+    }
+
+    const createNewPost = async () => {
+        const postInfo: CreateNewPost = {
+            prompt: post!.prompt,
+            tag: post!.tag,
+            userId: session?.user!.id
+        };
+
+        try {
+            const { data } = await createNewPost_API(postInfo);
+
+            if (data) {
+                console.log(data);
+            } else {
+                toast.error('Failed new Post.');
+            }
         } catch (error) {
             console.log(error);
         } finally {
             setSubmitting(false);
+            router.push('/');
         }
     }
 
