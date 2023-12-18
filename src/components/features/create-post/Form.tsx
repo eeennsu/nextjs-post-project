@@ -19,8 +19,9 @@ const Form: FC<Props> = ({ type }) => {
 
     const { data } = useSession();
     const session: SessionWithUserId = data; 
-    const { post, setPost, submitting, setSubmitting } = usePostContext();
     const router = useRouter();
+    console.log(session);
+    const { post, setPost, submitting, setSubmitting } = usePostContext();
     
     const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setPost(prev => ({
@@ -40,7 +41,7 @@ const Form: FC<Props> = ({ type }) => {
         e.preventDefault();
         setSubmitting(true);
     
-        if (!session?.user || !session.user.id) {
+        if (!session?.user || !session.user._id) {
             toast.warn('Not Found User.');
             return;
         }
@@ -61,30 +62,30 @@ const Form: FC<Props> = ({ type }) => {
     }
 
     const createNewPost = async () => {
-
         const _tags = post.tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
-
-        const postInfo = {
+     
+        const postInfo: CreateNewPost = {
             prompt: post!.prompt.trim(),
             tags: _tags,
-            userId: session!.user?.id!
+            _id: session?.user?._id!
         };     
 
         try {
             const data = await createNewPost_API(postInfo);
 
             if (data) {
-                console.log(data);
                 toast.success('create new post successfully!');
             } else {
                 toast.error('Failed new Post.');
             }
+            
         } catch (error) {
             console.log(error);
             toast.error('Failed new Post.');
         } finally {
             setSubmitting(false);
             router.push('/');
+            router.refresh();
         }
     }
 

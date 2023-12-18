@@ -1,9 +1,10 @@
 'use client';
 
+import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
+import { useState, useContext, createContext } from 'react'
 import { Post } from '@/types/postTypes';
-import { FC, PropsWithChildren, Dispatch, createContext, useState, SetStateAction, useContext } from 'react';
 
-export type PostContextType = {
+type PostContextType = {
     post: Post;
     setPost: Dispatch<SetStateAction<Post>>;
     submitting: boolean;
@@ -31,9 +32,6 @@ const PostProvider: FC<PropsWithChildren> = ({ children }) => {
     );
 }
 
-export const usePostContext = () => {
-
-    return useContext(PostContext);
-}
+export const usePostContext = () => useContext(PostContext);
 
 export default PostProvider;

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { string, z } from 'zod';
 
 export const PostSchema = z.object({
     prompt: z.string().trim().min(5, { message: 'prompt must be minimum of 5 characters.' }).max(100, { message: 'promprt must be maximum of 100 charachers.' }),
@@ -7,15 +7,23 @@ export const PostSchema = z.object({
 
 export const CreateNewPostSchema = PostSchema.extend({
     tags: z.string().trim().array(),
-    userId: z.string()
+    _id: z.string()
+});
+
+export const CreatorSchema = z.object({
+    email: z.string().email().optional(),
+    image: z.string().url().optional(),
+    username: z.string().optional(),
+    _id: z.string(),
 });
 
 export const DBPostSchema = PostSchema.extend({
-    creator: z.string().trim(),
+    creator: CreatorSchema,
     tags: z.string().trim().array(),
     _id: z.string(),
 });
 
 export type Post = z.infer<typeof PostSchema>;
 export type CreateNewPost = z.infer<typeof CreateNewPostSchema>;        
+export type Creator = z.infer<typeof CreatorSchema>;
 export type DBPost = z.infer<typeof DBPostSchema>;

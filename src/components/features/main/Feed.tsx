@@ -1,13 +1,16 @@
 import type { FC } from 'react';
 import SearchForm from './SearchForm';
-import CardList from './CardList';
+import CardList from '../posts/CardList';
+import CardsProvider from '@/context/CardsProvider';
 
 const Feed: FC = () => {
 
     return (
         <section className='feed'>
-            <SearchForm />
-            <CardList />
+            <CardsProvider>
+                <SearchForm />
+                <CardList />
+            </CardsProvider>            
         </section>
     );
 };

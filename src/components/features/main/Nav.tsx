@@ -17,11 +17,6 @@ const Nav: FC = () => {
     const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null);
     const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
-    useEffect(() => {
-        getProviders()
-            .then(res => setProviders(res));
-    }, []);
-
     const handleToggleDropdown = () => {
         setToggleDropdown(prev => !prev);
     }
@@ -45,6 +40,11 @@ const Nav: FC = () => {
         handleCloseropdown();
         signOut();
     }
+
+    useEffect(() => {
+        getProviders()
+            .then(res => setProviders(res));
+    }, []);
 
     return (
         <nav className='w-full flex-between'>

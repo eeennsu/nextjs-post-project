@@ -21,9 +21,10 @@ const handler = NextAuth({
     callbacks: {
         session: async ({ session }) => {
             const sessionUser = await User.findOne({ email: session.user?.email });
+            
             const userWithId = {
                 ...session.user,
-                id: sessionUser._id.toString()
+                _id: sessionUser._id.toString()
             };
         
             return {
@@ -32,18 +33,18 @@ const handler = NextAuth({
             };
         },
 
-        signIn: async ({ profile }) => {
+        signIn: async ({ user }) => {
             try {
                 await connectToDB();
 
-                const existUser = await User.findOne({ email: profile?.email });
-
+                const existUser = await User.findOne({ email: user.email });
+               
                 // 이미 존재하는 유저인지 확인하고, 없으면 생성
                 if (!existUser) {
                     await User.create({
-                        email: profile?.email,
-                        username: profile?.name?.replace(' ', '').toLowerCase(),
-                        image: profile?.image
+                        email: user?.email,
+                        username: user?.name?.replace(' ', '').toLowerCase(),
+                        image: user?.image
                     });
                 } 
 

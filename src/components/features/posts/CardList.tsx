@@ -1,19 +1,20 @@
 import type { FC } from 'react';
 import { getPosts_API } from '@/lib/postApis';
 import PostCard from './PostCard';
+import CardsProvider from '@/context/CardsProvider';
 
 const CardList: FC = async () => {
 
     const { posts } = await getPosts_API();
 
     return (
-        <div className='mt-16 prompt_layout'>
+        <div className='prompt_layout'>
             {
                 posts.map((post) => (
                     <PostCard key={post._id} post={post} />
                 ))
             }
-        </div>
+        </div>      
     );
 }
 

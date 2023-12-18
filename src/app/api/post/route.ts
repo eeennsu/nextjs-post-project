@@ -6,11 +6,11 @@ export async function GET(req: NextRequest) {
     try {
         await connectToDB();
 
-        const posts = await Post.find();
+        const posts = await Post.find().populate('creator');      // creator에 있는 모델을 같이 불러옴
 
-        return NextResponse.json({ suc: true, posts }, { status: 200 });
+        return NextResponse.json({ posts }, { status: 200 });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({ suc: false, error }, { status: 500 });
+        return NextResponse.json({ error }, { status: 500 });
     }
 }
