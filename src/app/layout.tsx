@@ -22,10 +22,10 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
                         <div className='background'>
                             <div className='gradient' />
                         </div>
-                        <div className='app'>
+                        <main className='app'>
                             <Header />
                             {children}
-                        </div>
+                        </main>
                         <ToastContainer 
                             position='top-center'
                             draggable

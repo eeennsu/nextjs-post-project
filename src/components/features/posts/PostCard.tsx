@@ -6,7 +6,7 @@ import { useCardsContext } from '@/context/CardsProvider';
 import Image from 'next/image';
 import Tag from './Tag';
 import Prompt from './Prompt';
-import CreatorInfo from './creatorInfo';
+import CreatorInfo from './CreatorInfo';
 
 type Props = {
     post: DBPost;
