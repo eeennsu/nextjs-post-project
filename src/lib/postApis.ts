@@ -2,13 +2,17 @@ import type { CreateNewPost, DBPost } from '@/types/postTypes';
 import axiosInst from './axiosInst';
 
 export const getPosts_API = async () => {
-    const response =  await axiosInst.get<{ suc: boolean, posts: DBPost[] }>('/post');
+    const { data } =  await axiosInst.get<{ posts: DBPost[] }>('/post');
 
-    return response.data;
+    if (!data) {
+        throw new Error('Faied to get posts.');
+    }
+
+    return data;
 };
 
 export const createNewPost_API = async (postInfo: CreateNewPost) => {
-    const response = await axiosInst.post<{ suc: boolean, newPost: DBPost }>('/post/new', postInfo);
+    const { data } = await axiosInst.post<{ newPost: DBPost }>('/post/new', postInfo);
 
-    return response.data;
+    return data;
 };

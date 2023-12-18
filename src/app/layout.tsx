@@ -1,8 +1,8 @@
 import type { Metadata, NextPage } from 'next'
 import type { PropsWithChildren } from 'react';
 import { ToastContainer } from 'react-toastify';
-import Header from '@/components/features/Header';
-import AuthProvider from '@/components/features/AuthProvider';
+import Header from '@/components/features/main/Header';
+import AuthProvider from '@/components/features/main/AuthProvider';
 import PostProvider from '@/context/PostProvider';
 import '@/styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';

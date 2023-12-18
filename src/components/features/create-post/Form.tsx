@@ -6,12 +6,13 @@ import type { SessionWithUserId } from '@/types/apiTypes';
 import { usePostContext } from '@/context/PostProvider';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
-import { createNewPost_API } from '@/lib/postApis';
 import { useRouter } from 'next/navigation';
+import { createNewPost_API } from '@/lib/postApis';
 import Link from 'next/link';
+import FormHead from '../main/FormHead';
 
 type Props = {
-    type: 'create';
+    type: PostType;
 }
 
 const Form: FC<Props> = ({ type }) => {
@@ -37,9 +38,9 @@ const Form: FC<Props> = ({ type }) => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // setSubmitting(true);
+        setSubmitting(true);
     
-        if (!session?.user) {
+        if (!session?.user || !session.user.id) {
             toast.warn('Not Found User.');
             return;
         }
@@ -63,11 +64,11 @@ const Form: FC<Props> = ({ type }) => {
 
         const _tags = post.tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
 
-        const postInfo: CreateNewPost = {
+        const postInfo = {
             prompt: post!.prompt.trim(),
             tags: _tags,
-            userId: session?.user?.id!
-        };
+            userId: session!.user?.id!
+        };     
 
         try {
             const data = await createNewPost_API(postInfo);
@@ -89,12 +90,7 @@ const Form: FC<Props> = ({ type }) => {
 
     return (
         <section className='flex-col flex-start'>
-            <h1 className='flex text-left head_text'>
-                <span className='mr-4 blue_gradient'>{type}</span>Post
-            </h1>
-            <p className='max-w-md text-left desc'>
-                {type} and share amazing prompts with the world, and let your imageination run wild with any AI-powered platform.
-            </p>
+            <FormHead type={type} />
             <form className='flex flex-col w-full max-w-2xl gap-8 mt-10 glassmorphism' onSubmit={handleSubmit}>
                 <label>
                     <span className='text-base font-semibold text-gray-700 font-satoshi'>

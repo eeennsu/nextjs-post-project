@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Feed from '@/components/features/Feed';
+import Feed from '@/components/features/main/Feed';
 
 const HomePage: NextPage = async () => {
 

@@ -1,5 +1,5 @@
 import type { Metadata, NextPage } from 'next';
-import Form from '@/components/features/Form';
+import Form from '@/components/features/create-post/Form';
 
 export const metadata: Metadata = {
     title: 'Create Post',
@@ -9,9 +9,7 @@ export const metadata: Metadata = {
 const CreatePostPage: NextPage = () => {
 
     return (
-        <Form 
-            type='create'
-        />
+        <Form type='create' />
     );
 };
 
