@@ -39,7 +39,6 @@ const Form: FC<Props> = ({ type }) => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setSubmitting(true);
     
         if (!session?.user || !session.user._id) {
             toast.warn('Not Found User.');
@@ -62,6 +61,7 @@ const Form: FC<Props> = ({ type }) => {
     }
 
     const createNewPost = async () => {
+        setSubmitting(true);
         const _tags = post.tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
      
         const postInfo: CreateNewPost = {

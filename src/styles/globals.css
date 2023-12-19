@@ -164,3 +164,19 @@
 .flex-between {
   @apply flex justify-between items-center;
 }
+
+body{
+  -ms-overflow-style: none;
+}
+  
+::-webkit-scrollbar {
+  display: none;
+}
+
+.create_date {
+  -ms-overflow-style: none;
+}
+
+.create_date::-webkit-scrollbar {
+  display: none;
+}

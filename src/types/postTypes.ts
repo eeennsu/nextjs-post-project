@@ -21,6 +21,7 @@ export const DBPostSchema = PostSchema.extend({
     creator: CreatorSchema,
     tags: z.string().trim().array(),
     _id: z.string(),
+    createdAt: z.string(),
 });
 
 export type Post = z.infer<typeof PostSchema>;

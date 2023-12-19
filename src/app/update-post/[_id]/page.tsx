@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-const ProfilePage: NextPage = () => {
+const CHANGE_NAME_PLEASE: NextPage = () => {
 
     return (
         <div>
@@ -9,4 +9,4 @@ const ProfilePage: NextPage = () => {
     );
 };
 
-export default ProfilePage;
+export default CHANGE_NAME_PLEASE;

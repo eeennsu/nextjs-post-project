@@ -15,8 +15,10 @@ const PostSchema = new Schema({
     tags: {
         type: [String],
         required: [true, 'Tag is required.'],
-    }
+    },
 });
+
+PostSchema.set('timestamps', true);
 
 const Post = models['Post'] || model('Post', PostSchema);
 

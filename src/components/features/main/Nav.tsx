@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import type { LiteralUnion, ClientSafeProvider } from 'next-auth/react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { BuiltInProviderType } from 'next-auth/providers/index';
 import { signIn, signOut, getProviders } from 'next-auth/react';
 import { toast } from 'react-toastify';
@@ -41,8 +41,6 @@ const Nav: FC = () => {
         signOut();
     }
 
-    const encodedUsername = useMemo(() => session?.user?.name ? encodeURIComponent(session?.user?.name as string) : undefined, [session]);
-
     useEffect(() => {
         getProviders()
             .then(res => setProviders(res));
@@ -72,7 +70,7 @@ const Nav: FC = () => {
                             <button onClick={handleLogout} className='outline_btn'>
                                 Logout
                             </button>                        
-                            <Link href={`/profile/${encodedUsername}`}>                                    
+                            <Link href={`/profile/${session.user._id}`}>                                    
                                 <Image src={session?.user?.image || '/assets/images/logo.svg'} alt='profile' width={38} height={38} className='transition rounded-full hover:shadow-xl' />
                             </Link>
                         </div>
@@ -95,7 +93,7 @@ const Nav: FC = () => {
                             {
                                 toggleDropdown && (
                                     <div className='dropdown'>
-                                        <Link className='dropdown_link' href='/profile' onClick={handleCloseropdown}>
+                                        <Link className='dropdown_link' href={`/profile/${session.user._id}`} onClick={handleCloseropdown}>
                                             My Profile
                                         </Link>
                                         <Link className='dropdown_link' href='/create-post' onClick={handleCloseropdown}>

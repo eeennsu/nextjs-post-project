@@ -3,23 +3,30 @@
 import type { DBPost } from '@/types/postTypes';
 import type { FC } from 'react';
 import { useCardsContext } from '@/context/CardsProvider';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Tag from './Tag';
 import Prompt from './Prompt';
 import CreatorInfo from './CreatorInfo';
+import useSessionWithUserId from '@/hooks/auth/useSessionWithUserId';
+import Spinner from '@/components/commons/Spinner';
 
 type Props = {
     post: DBPost;
+    handleEdit?: () => void;
+    handleDelete?: () => void;
+    isDeleting?: boolean;
 }
 
-const PostCard: FC<Props> = ({ post: { creator, prompt, tags } }) => {
+const PostCard: FC<Props> = ({ post: { creator, prompt, tags, createdAt }, handleEdit, handleDelete, isDeleting }) => {
 
-    const { 
-        copyedPrompt, setCopyedPrompt, 
-        searchTagTerm, setSearchTagTerm
-     } = useCardsContext();
+    const pathName = usePathname();
+    const { session } = useSessionWithUserId();
+    const { copyedPrompt, setCopyedPrompt } = useCardsContext();
+
 
     const isCopyed = copyedPrompt === prompt;
+    const isControllable = session?.user?._id === creator._id && pathName.startsWith('/profile');
 
     const handleCopyPrompt = () => {
         setCopyedPrompt(prompt);
@@ -48,7 +55,7 @@ const PostCard: FC<Props> = ({ post: { creator, prompt, tags } }) => {
             <Prompt>
                 {prompt}
             </Prompt>
-            <p className='flex text-sm cursor-pointer gap-x-2 font-inter '>
+            <p className='flex overflow-x-auto text-sm cursor-pointer gap-x-2 font-inter create_date'>
                 {
                     tags.map((tag) => (
                         <Tag key={tag}>
@@ -57,6 +64,24 @@ const PostCard: FC<Props> = ({ post: { creator, prompt, tags } }) => {
                     ))
                 }
             </p>
+            {
+                isControllable && (
+                    <div className='gap-4 pt-3 mt-5 border-t border-gray-100 flex-center'>
+                        <button className='h-8 text-sm transition rounded-md shadow-md cursor-pointer w-14 font-inter green_gradient hover:shadow-xl flex-center' onClick={handleEdit}>
+                            Edit
+                        </button>
+                        <button className='h-8 text-sm transition rounded-md shadow-md cursor-pointer w-14 font-inter orange_gradient hover:shadow-xl flex-center' onClick={handleDelete} disabled={isDeleting}>
+                            {
+                                isDeleting ? (
+                                    <Spinner />
+                                ) : (
+                                    'Delete'
+                                )
+                            }
+                        </button>
+                    </div>
+                )
+            }
         </div>
     );
 }

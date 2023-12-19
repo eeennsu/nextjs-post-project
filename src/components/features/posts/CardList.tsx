@@ -1,15 +1,15 @@
 import type { FC } from 'react';
-import { getPosts_API } from '@/lib/postApis';
+import { getAllPosts_API } from '@/lib/postApis';
 import PostCard from './PostCard';
 
 const CardList: FC = async () => {
 
-    const { posts } = await getPosts_API();
+    const { allPosts } = await getAllPosts_API();
 
     return (
         <div className='prompt_layout'>
             {
-                posts.map((post) => (
+                allPosts.map((post) => (
                     <PostCard key={post._id} post={post} />
                 ))
             }
