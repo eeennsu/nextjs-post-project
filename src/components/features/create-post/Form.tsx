@@ -20,7 +20,7 @@ const Form: FC<Props> = ({ type }) => {
     const { data } = useSession();
     const session: SessionWithUserId = data; 
     const router = useRouter();
-    console.log(session);
+  
     const { post, setPost, submitting, setSubmitting } = usePostContext();
     
     const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {

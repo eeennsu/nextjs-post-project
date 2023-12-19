@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import { getPosts_API } from '@/lib/postApis';
 import PostCard from './PostCard';
-import CardsProvider from '@/context/CardsProvider';
 
 const CardList: FC = async () => {
 
@@ -22,4 +21,4 @@ export default CardList;
 
 
 
-export const revalidate = 60;
+// export const revalidate = 60;

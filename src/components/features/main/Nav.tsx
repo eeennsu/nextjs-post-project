@@ -68,12 +68,10 @@ const Nav: FC = () => {
                         <div className='flex gap-3 md:gap-4'>
                             <Link href='/create-post' className='black_btn'>
                                 Create Post
-                            </Link>
-                        
+                            </Link>                        
                             <button onClick={handleLogout} className='outline_btn'>
                                 Logout
-                            </button>
-                        
+                            </button>                        
                             <Link href={`/profile/${encodedUsername}`}>                                    
                                 <Image src={session?.user?.image || '/assets/images/logo.svg'} alt='profile' width={38} height={38} className='transition rounded-full hover:shadow-xl' />
                             </Link>
@@ -97,7 +95,7 @@ const Nav: FC = () => {
                             {
                                 toggleDropdown && (
                                     <div className='dropdown'>
-                                        <Link className='dropdown_link' href={`/profile/${encodedUsername}`} onClick={handleCloseropdown}>
+                                        <Link className='dropdown_link' href='/profile' onClick={handleCloseropdown}>
                                             My Profile
                                         </Link>
                                         <Link className='dropdown_link' href='/create-post' onClick={handleCloseropdown}>
