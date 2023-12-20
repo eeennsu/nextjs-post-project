@@ -1,1 +1,1 @@
-type PostType = 'create';
+type PostType = 'create' | 'update';

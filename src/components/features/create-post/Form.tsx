@@ -1,21 +1,26 @@
 'use client';
 
-import type { ChangeEvent, FC, FormEvent } from 'react';
-import type { CreateNewPost } from '@/types/postTypes';
+import type { FC, ChangeEvent, FormEvent } from 'react';
+import type { CreateNewPost, DBPost, Post } from '@/types/postTypes';
 import type { SessionWithUserId } from '@/types/apiTypes';
+import { useEffect } from 'react';
 import { usePostContext } from '@/context/PostProvider';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { createNewPost_API } from '@/lib/postApis';
+import { createNewPost_API, updateMyPost_API } from '@/lib/postApis';
 import Link from 'next/link';
 import FormHead from '../main/FormHead';
+import Spinner from '@/components/commons/Spinner';
 
 type Props = {
     type: PostType;
+    prevPrompt?: string;
+    prevTags?: string[];
+    curPostId?: string;
 }
 
-const Form: FC<Props> = ({ type }) => {
+const Form: FC<Props> = ({ type, prevPrompt, prevTags, curPostId }) => {
 
     const { data } = useSession();
     const session: SessionWithUserId = data; 
@@ -57,12 +62,17 @@ const Form: FC<Props> = ({ type }) => {
     
         switch(type) {
             case 'create': createNewPost(); break;
+            case 'update': updatePost(); break;
         }
+    }
+
+    const setTagsWithShop = (tags: string) => {
+        return tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
     }
 
     const createNewPost = async () => {
         setSubmitting(true);
-        const _tags = post.tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
+        const _tags = setTagsWithShop(post.tags);
      
         const postInfo: CreateNewPost = {
             prompt: post!.prompt.trim(),
@@ -74,20 +84,71 @@ const Form: FC<Props> = ({ type }) => {
             const data = await createNewPost_API(postInfo);
 
             if (data) {
-                toast.success('create new post successfully!');
+                toast.success('Successfully create new post!');
             } else {
-                toast.error('Failed new Post.');
+                toast.error('Failed new poost.');
             }
             
         } catch (error) {
             console.log(error);
-            toast.error('Failed new Post.');
-        } finally {
-            setSubmitting(false);
+            toast.error('Failed new post.');
+        } finally { 
             router.push('/');
             router.refresh();
+            setSubmitting(false);  
+            setPost({ 
+                prompt: '',
+                tags: ''
+            });
         }
     }
+
+    const updatePost = async () => {
+        setSubmitting(true);
+        const _tags = setTagsWithShop(post.tags);
+
+        const updatePost: Partial<DBPost> = {
+            prompt: post!.prompt.trim(),
+            tags: _tags     
+        };
+
+        if (!curPostId) {
+            toast.error('Not founded current post.');
+            return;
+        }
+
+        try {
+            const data = await updateMyPost_API(curPostId, updatePost);
+            
+            if (data.suc) {
+                toast.success('Update exist post successfully!');
+            } else {
+                toast.success('Failed update exist post.');
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Failed new Post.');
+        } finally {
+            router.push('/');
+            router.refresh();
+            setSubmitting(false);  
+            setPost({ 
+                prompt: '',
+                tags: ''
+            });
+        }
+    }
+
+    useEffect(() => {
+        if (type === 'update' && prevPrompt && prevTags) {
+            setPost({
+                prompt: prevPrompt,
+                tags: ['', ...prevTags].join('#')
+            });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [type, prevPrompt, prevTags]);
 
     return (
         <section className='flex-col flex-start'>
@@ -98,7 +159,7 @@ const Form: FC<Props> = ({ type }) => {
                         Your AI Prompt
                     </span>
                     <textarea 
-                        className='form_textarea' 
+                        className='form_textarea'                  
                         value={post?.prompt} 
                         onChange={handlePromptChange} 
                         placeholder='Write your prompt here...' 
@@ -118,12 +179,36 @@ const Form: FC<Props> = ({ type }) => {
                     />
                 </label>
                 <div className='gap-4 flex-end'>
-                    <Link href='/' className='px-4 py-2 text-gray-700 bg-orange-200 rounded-md shadow-md hover:bg-orange-300'>
+                    <Link href='/' className='form_buton bg-orange-200 hover:bg-orange-300'>
                         Cancel
                     </Link>
-                    <button className='px-4 py-2 text-gray-700 bg-blue-200 rounded-md shadow-md hover:bg-blue-300' type='submit' disabled={submitting}>
-                        {submitting ? `${type}...` : 'Submit'}
-                    </button>
+                    {
+                        type === 'create' ? (
+                            <button className={`form_buton bg-blue-200  hover:bg-blue-300 ${submitting && 'bg-blue-100'}`} type='submit' disabled={submitting}>
+                                {
+                                    submitting ? (
+                                        <Spinner />                             
+                                    ) : (
+                                        <span className='first-letter:uppercase'>
+                                            {type}
+                                        </span>
+                                    )
+                                }
+                            </button>
+                        ) : (
+                            <button className={`form_buton bg-teal-200 hover:bg-teal-300 ${submitting && 'bg-teal-100'}`} type='submit' disabled={submitting}>
+                                {
+                                    submitting ? (
+                                        <Spinner />                             
+                                    ) : (
+                                        <span className='first-letter:uppercase'>
+                                            {type}
+                                        </span>
+                                    )
+                                }
+                            </button>
+                        )
+                    }
                 </div>
             </form>
         </section>

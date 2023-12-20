@@ -165,6 +165,10 @@
   @apply flex justify-between items-center;
 }
 
+.form_buton {
+  @apply w-20 h-8 flex-center text-gray-700 rounded-md shadow-md
+}
+
 body{
   -ms-overflow-style: none;
 }

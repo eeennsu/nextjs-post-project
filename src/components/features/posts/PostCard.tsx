@@ -4,6 +4,7 @@ import type { DBPost } from '@/types/postTypes';
 import type { FC } from 'react';
 import { useCardsContext } from '@/context/CardsProvider';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Tag from './Tag';
 import Prompt from './Prompt';
@@ -18,27 +19,38 @@ type Props = {
     isDeleting?: boolean;
 }
 
-const PostCard: FC<Props> = ({ post: { creator, prompt, tags, createdAt }, handleEdit, handleDelete, isDeleting }) => {
+const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt }, handleEdit, handleDelete, isDeleting }) => {
 
     const pathName = usePathname();
     const { session } = useSessionWithUserId();
-    const { copyedPrompt, setCopyedPrompt } = useCardsContext();
+    const { copyedId, setCopyedId } = useCardsContext();
+    const [isCopyed, setIsCopyed] = useState<boolean>(false);
 
-
-    const isCopyed = copyedPrompt === prompt;
     const isControllable = session?.user?._id === creator._id && pathName.startsWith('/profile');
 
-    const handleCopyPrompt = () => {
-        setCopyedPrompt(prompt);
+    const handleCopyPrompt = () => {     
+        console.log('_id', _id);
+        setCopyedId(_id);
         navigator.clipboard.writeText(prompt);
-        setTimeout(() => setCopyedPrompt(''), 3000);
     }
+
+    useEffect(() => {
+        if (_id === copyedId) setIsCopyed(true);  
+        else if (_id !== copyedId) setIsCopyed(false);
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [copyedId]);
+
+
+    // useEffect(() => {
+    //     console.log('copyedId : ', copyedId);
+    // }, [copyedId]);
 
     return (
         <div className='prompt_card'>
             <div className='flex items-start justify-between gap-5 pb-4 border-b-2 border-b-gray-300/90'>
                 <CreatorInfo creator={creator} />
-                <div className={`copy_btn ${isCopyed && 'scale-150'}`} onClick={handleCopyPrompt}>
+                <div className={`copy_btn ${isCopyed && 'scale-125'}`} onClick={handleCopyPrompt}>
                     <Image 
                         src={
                             isCopyed

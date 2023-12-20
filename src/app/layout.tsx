@@ -6,6 +6,7 @@ import AuthProvider from '@/components/features/main/AuthProvider';
 import PostProvider from '@/context/PostProvider';
 import '@/styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
+import ContextProviders from '@/context/ContextProviders';
 
 export const metadata: Metadata = {
   title: 'My Next Post App',
@@ -18,7 +19,7 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
         <html lang='en'>
             <body>
                 <AuthProvider>
-                    <PostProvider>
+                    <ContextProviders>                  
                         <div className='background'>
                             <div className='gradient' />
                         </div>
@@ -31,7 +32,7 @@ const RootLayout: NextPage<PropsWithChildren> = ({ children }) => {
                             draggable
                             theme='light'
                         />
-                    </PostProvider>                    
+                    </ContextProviders>             
                 </AuthProvider>
             </body>
         </html>

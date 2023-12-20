@@ -9,7 +9,7 @@ type Props = {
     reset: () => void;
 }
 
-const ProfileError: FC<Props> = ({ error, reset }) => {
+const UpdatePostError: FC<Props> = ({ error, reset }) => {
 
     useEffect(() => {
         console.log(error);
@@ -20,4 +20,4 @@ const ProfileError: FC<Props> = ({ error, reset }) => {
     );
 }
 
-export default ProfileError;
+export default UpdatePostError;

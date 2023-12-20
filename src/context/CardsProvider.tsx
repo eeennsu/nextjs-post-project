@@ -4,15 +4,15 @@ import type { FC, PropsWithChildren, Dispatch, SetStateAction } from 'react';
 import { useState, createContext, useContext } from 'react';
 
 type CardsProviderType = {
-    copyedPrompt: string;
-    setCopyedPrompt: Dispatch<SetStateAction<string>>;
+    copyedId: string;
+    setCopyedId: Dispatch<SetStateAction<string>>;
     searchTagTerm: string;
     setSearchTagTerm: Dispatch<SetStateAction<string>>;
 }
 
 const initValue: CardsProviderType = {
-    copyedPrompt: '',
-    setCopyedPrompt: () => {},
+    copyedId: '',
+    setCopyedId: () => {},
     searchTagTerm: '',
     setSearchTagTerm: () => {},
 }
@@ -20,14 +20,14 @@ const initValue: CardsProviderType = {
 const CardsContext = createContext<CardsProviderType>(initValue);
 
 const CardsProvider: FC<PropsWithChildren> = ({ children }) => {
-    const [copyedPrompt, setCopyedPrompt] = useState<string>('');
+    const [copyedId, setCopyedId] = useState<string>('');
     const [searchTagTerm, setSearchTagTerm] = useState<string>('');
 
     return (
         <CardsContext.Provider 
             value={{ 
-                copyedPrompt, 
-                setCopyedPrompt, 
+                copyedId, 
+                setCopyedId, 
                 searchTagTerm, 
                 setSearchTagTerm 
             }}
