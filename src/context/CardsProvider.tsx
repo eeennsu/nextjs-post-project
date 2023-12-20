@@ -6,30 +6,30 @@ import { useState, createContext, useContext } from 'react';
 type CardsProviderType = {
     copyedId: string;
     setCopyedId: Dispatch<SetStateAction<string>>;
-    searchTagTerm: string;
-    setSearchTagTerm: Dispatch<SetStateAction<string>>;
+    searchTerm: string;
+    setSearchTerm: Dispatch<SetStateAction<string>>;
 }
 
 const initValue: CardsProviderType = {
     copyedId: '',
     setCopyedId: () => {},
-    searchTagTerm: '',
-    setSearchTagTerm: () => {},
+    searchTerm: '',
+    setSearchTerm: () => {},
 }
 
 const CardsContext = createContext<CardsProviderType>(initValue);
 
 const CardsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [copyedId, setCopyedId] = useState<string>('');
-    const [searchTagTerm, setSearchTagTerm] = useState<string>('');
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     return (
         <CardsContext.Provider 
             value={{ 
                 copyedId, 
                 setCopyedId, 
-                searchTagTerm, 
-                setSearchTagTerm 
+                searchTerm, 
+                setSearchTerm 
             }}
         >
             {children}

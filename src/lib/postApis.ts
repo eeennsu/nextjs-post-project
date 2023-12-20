@@ -54,3 +54,10 @@ export const updateMyPost_API = async (_id: string, updatedPost: Partial<DBPost>
 
     return data;
 }
+
+// client
+export const searchPosts_API = async (type: string, term: string) => {
+    const { data } = await axiosInst.get<{ results: DBPost[] }>(`/post/search?type=${type}&term=${term}`);
+
+    return data;
+}

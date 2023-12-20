@@ -23,6 +23,13 @@ const MyPosts: FC<Props> = ({ myPosts }) => {
     }
 
     const handleDelete = async (_id: string) => {
+        const handleConfirmed = confirm('Are you sure you want to delete this post?');
+
+        if (!handleConfirmed) {
+            
+            return;
+        }
+
         try {
             setIsDeleting(true);
             setDeletePostId(_id);

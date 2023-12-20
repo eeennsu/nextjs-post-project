@@ -1,19 +1,57 @@
+'use client';
+
 import type { FC } from 'react';
-import { getAllPosts_API } from '@/lib/postApis';
+import { DBPost } from '@/types/postTypes';
+import { usePostContext } from '@/context/PostProvider';
+import { useRouter } from 'next/navigation';
+import { useCardsContext } from '@/context/CardsProvider';
 import PostCard from './PostCard';
+import NotSearchedResults from '../main/NotSearchedResults';
 
-const CardList: FC = async () => {
+type Props = {
+    posts: DBPost[];
+}
 
-    const { allPosts } = await getAllPosts_API();
+const CardList: FC<Props> = ({ posts }) => {
+
+    const { postResults, setPostResults, setSearchType } = usePostContext();
+    const { setSearchTerm } = useCardsContext();
+    const router = useRouter();
+
+    const handleBack = () => {
+        setPostResults(null);
+        setSearchTerm('');
+        setSearchType('tag');
+        router.refresh();    
+    }
 
     return (
-        <div className='prompt_layout'>
-            {
-                allPosts.map((post) => (
-                    <PostCard key={post._id} post={post} />
-                ))
-            }
-        </div>      
+        <>
+            <div className='mt-6 sm:mt-10'>
+                {
+                    postResults && (
+                        <button className='back_btn' onClick={handleBack}>
+                            Back
+                        </button>
+                    )
+                }
+            </div>
+            <div className='prompt_layout'>         
+                {
+                    postResults && postResults.length >= 1 ? (
+                        postResults?.map((post) => (
+                            <PostCard key={post._id} post={post} />
+                        ))
+                    ) : postResults?.length === 0 ? (
+                        <NotSearchedResults />
+                    ) : (
+                        posts.map((post) => (
+                            <PostCard key={post._id} post={post} />
+                        ))
+                    )
+                }            
+            </div>   
+        </>   
     );
 }
 

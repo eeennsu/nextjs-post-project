@@ -21,12 +21,12 @@ type Props = {
 
 const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt }, handleEdit, handleDelete, isDeleting }) => {
 
-    const pathName = usePathname();
+    const isProfilePage = usePathname().startsWith('/profile');
     const { session } = useSessionWithUserId();
-    const { copyedId, setCopyedId } = useCardsContext();
+    const { copyedId, setCopyedId, setSearchTerm } = useCardsContext();
     const [isCopyed, setIsCopyed] = useState<boolean>(false);
 
-    const isControllable = session?.user?._id === creator._id && pathName.startsWith('/profile');
+    const isControllable = session?.user?._id === creator._id && isProfilePage;
 
     const handleCopyPrompt = () => {     
         console.log('_id', _id);
@@ -41,10 +41,13 @@ const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt }, 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [copyedId]);
 
-
-    // useEffect(() => {
-    //     console.log('copyedId : ', copyedId);
-    // }, [copyedId]);
+    const setSearchTag = (tag: string) => {
+        if (isProfilePage) {
+            return;
+        }
+        
+        setSearchTerm(tag);
+    }
 
     return (
         <div className='prompt_card'>
@@ -70,7 +73,7 @@ const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt }, 
             <p className='flex overflow-x-auto text-sm cursor-pointer gap-x-2 font-inter create_date'>
                 {
                     tags.map((tag) => (
-                        <Tag key={tag}>
+                        <Tag key={tag} onClick={() => setSearchTag(tag)}>
                             {tag}
                         </Tag>
                     ))

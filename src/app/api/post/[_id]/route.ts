@@ -35,7 +35,7 @@ export async function PATCH(req: NextRequest, { params: { _id } }: Props) {
 
     try {
         await connectToDB();
-
+    
         const updateContent: Partial<DBPost> = {
             prompt,
             tags
