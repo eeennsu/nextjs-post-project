@@ -10,10 +10,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import MainLogo from './MainLogo';
 import useSessionWithUserId from '@/hooks/auth/useSessionWithUserId';
+import Loading from '@/components/commons/Loading';
 
 const Nav: FC = () => {
 
-    const { session } = useSessionWithUserId();
+    const { session, status } = useSessionWithUserId();
     const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null);
     const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
@@ -52,7 +53,9 @@ const Nav: FC = () => {
             {/* desktop */}
             <div className='hidden sm:flex' role='desktop-menu'>
                 {
-                    !session?.user ? (
+                    status === 'loading' ? (
+                        <Loading />
+                    ) : status === 'unauthenticated' ? (
                         providers && Object.values(providers!).map((provider) => (
                             <button 
                                 key={provider.name} 
@@ -62,7 +65,7 @@ const Nav: FC = () => {
                                 Login
                             </button>
                         ))
-                    ) : (     
+                    ) : session?.user && (     
                         <div className='flex gap-3 md:gap-4'>
                             <Link href='/create-post' className='black_btn'>
                                 Create Post
@@ -81,13 +84,15 @@ const Nav: FC = () => {
             {/* mobile */}
             <div className='relative flex sm:hidden'>
                 {
-                    !session?.user ? (
+                    status === 'loading' ? (
+                        <Loading />
+                    ) : status === 'unauthenticated' ? (
                         providers && Object.values(providers!).map((provider) => (
                             <button key={provider.name} onClick={() => handleLogin(provider.id)} className='black_btn'>
                                 Login
                             </button>
                         ))
-                    ) : (
+                    ) : session?.user && (
                         <div className='flex'>
                             <Image src='/assets/images/logo.svg' alt='profile' className='object-contain cursor-pointer' width={37} height={37} onClick={handleToggleDropdown}/>
                             {

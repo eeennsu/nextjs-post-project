@@ -19,7 +19,7 @@ const CreatorInfo: FC<Props> = ({ creator }) => {
             />
             <div className='flex flex-col'>
                 <h3 className='font-semibold text-gray-900 font-satoshi'>
-                    {creator.username}
+                    {creator.name}
                 </h3>
                 <p className='text-sm text-gray-500 font-inter'>
                     {creator.email}

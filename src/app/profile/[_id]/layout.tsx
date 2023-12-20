@@ -1,9 +1,11 @@
 import type { Metadata, NextPage } from 'next';
 import type { PropsWithChildren } from 'react';
+import { getOneUser_API } from '@/lib/userApis';
 
-export const metadata: Metadata = {
-    title: 'My Profile',
-    description: 'my profile page.'
+type Props = {
+    params: {
+        _id: string;
+    }
 };
 
 const ProfileLayout: NextPage<PropsWithChildren> = ({ children }) => {
@@ -16,3 +18,21 @@ const ProfileLayout: NextPage<PropsWithChildren> = ({ children }) => {
 };
 
 export default ProfileLayout;
+
+
+
+export const generateMetadata = async ({ params: { _id } }: Props): Promise<Metadata> => {
+
+    const { user } = await getOneUser_API(_id);
+
+    if (!user) {
+        return {
+            title: 'User not found'
+        };
+    }
+   
+    return {
+        title: `${user.name}'s profile page.`,
+        description: `this is ${user.name}'s profile page.`,
+    };
+}

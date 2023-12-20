@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import { getMyPosts_API } from '@/lib/postApis';
+import { getAllUsers_API } from '@/lib/userApis';
 import Profile from '@/components/features/main/Profile';
 
 type Props = {
@@ -22,3 +23,19 @@ const ProfilePage: NextPage<Props> = async ({ params: { _id } }) => {
 };
 
 export default ProfilePage;
+
+
+
+export const generateStaticParams = async () => {
+    const { users } = await getAllUsers_API();
+
+    if (!users) {
+        return [];
+    }
+
+    return users.map((user) => ({
+        _id: user._id
+    }));
+}
+
+export const revalidate = 10;

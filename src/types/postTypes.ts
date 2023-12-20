@@ -13,7 +13,7 @@ export const CreateNewPostSchema = PostSchema.extend({
 export const CreatorSchema = z.object({
     email: z.string().email().optional(),
     image: z.string().url().optional(),
-    username: z.string().optional(),
+    name: z.string().optional(),
     _id: z.string(),
 });
 
