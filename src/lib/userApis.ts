@@ -8,6 +8,7 @@ export const getAllUsers_API = async () => {
     const response = await fetch(`${url}/user`, {
         method: 'GET',
     });
+
     const data = await response.json();
 
     return data;
@@ -19,6 +20,7 @@ export const getOneUser_API = async (_id: string) => {
     const response = await fetch(`${url}/user/${_id}`, {
         method: 'GET',
     });
+    
     const data = await response.json();
 
     return data;

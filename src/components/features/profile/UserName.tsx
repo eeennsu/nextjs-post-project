@@ -1,7 +1,7 @@
 'use client';
 
-import useSessionWithUserId from '@/hooks/auth/useSessionWithUserId';
 import type { FC } from 'react';
+import useSessionWithUserId from '@/hooks/auth/useSessionWithUserId';
 
 const UserName: FC = () => {
 

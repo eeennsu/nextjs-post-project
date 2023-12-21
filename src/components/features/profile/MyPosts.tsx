@@ -4,8 +4,8 @@ import type { FC } from 'react';
 import type { DBPost } from '@/types/postTypes';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { deleteMyPost_API } from '@/lib/postApis';
 import { toast } from 'react-toastify';
+import { deleteMyPostAction } from '@/lib/postActions';
 import PostCard from '../posts/PostCard';
 
 type Props = {
@@ -25,27 +25,20 @@ const MyPosts: FC<Props> = ({ myPosts }) => {
     const handleDelete = async (_id: string) => {
         const handleConfirmed = confirm('Are you sure you want to delete this post?');
 
-        if (!handleConfirmed) {
-            
+        if (!handleConfirmed) {            
             return;
         }
 
         try {
             setIsDeleting(true);
             setDeletePostId(_id);
-            const { suc } = await deleteMyPost_API(_id);
-            console.log('suc', suc);
-            if (suc) {
-                toast.success('Success to delete post.');
-            } else {
-                toast.error('Failed to delete post.');
-            }
-
-            router.refresh();
+            await deleteMyPostAction(_id);        
+            toast.success('Successfully deleted.');
         } catch (error) {
             console.log(error);
             toast.error('Failed to delete post.');
         } finally {
+
             setIsDeleting(false);
             setDeletePostId('');
         }

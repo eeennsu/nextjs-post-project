@@ -6,7 +6,7 @@ import { getAllPosts_API } from '@/lib/postApis';
 const Feed: FC = async () => {
 
     const { allPosts } = await getAllPosts_API();
-
+    
     return (
         <section className='feed'>         
             <SearchForm />

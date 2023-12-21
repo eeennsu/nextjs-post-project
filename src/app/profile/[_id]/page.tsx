@@ -27,16 +27,16 @@ export default ProfilePage;
 
 
 
-export const revalidate = 0;
-// export const generateStaticParams = async () => {
-//     const response = await getAllUsers_API();
-//     const users = response.users as DBUser[];
+export const revalidate = 10;
+export const generateStaticParams = async () => {
+    const response = await getAllUsers_API();
+    const users = response.users as DBUser[];
 
-//     if (!users) {
-//         return [];
-//     }
+    if (!users) {
+        return [];
+    }
 
-//     return users.map((user) => ({
-//         _id: user._id
-//     }));
-// }
+    return users.map((user) => ({
+        _id: user._id
+    }));
+}

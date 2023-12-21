@@ -1,5 +1,7 @@
+import type { NextRequest } from 'next/server';
+import type { DBPost } from '@/types/postTypes';
 import { connectToDB } from '@/db/db';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import Post from '@/models/Post';
 import User from '@/models/User';
 
@@ -18,12 +20,12 @@ export async function GET(req: NextRequest) {
         let results;
 
         if (type === 'creator') {
-            const populatedResults = await Post.find({}).populate({
+            const populatedResults: Required<DBPost>[] = await Post.find({}).populate({
                 path: 'creator',
                 model: User,
             });
 
-            results = populatedResults.filter(({ creator }) => creator && creator.username.includes(term));
+            results = populatedResults.filter(({ creator }) => creator && creator.name!.includes(term));
 
         } else if (type === 'prompt') {
             const regex = new RegExp(term);

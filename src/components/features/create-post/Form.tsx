@@ -1,17 +1,19 @@
 'use client';
 
 import type { FC, ChangeEvent, FormEvent } from 'react';
-import type { CreateNewPost, DBPost, Post } from '@/types/postTypes';
+import type { CreateNewPost } from '@/types/postTypes';
 import type { SessionWithUserId } from '@/types/apiTypes';
 import { useEffect } from 'react';
 import { usePostContext } from '@/context/PostProvider';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { createNewPost_API, updateMyPost_API } from '@/lib/postApis';
+import { createNewPostAction, updateMyPostAction } from '@/lib/postActions';
+import { revalidatePath } from 'next/cache';
+import { setTagsWithShop } from '@/utils/setTag';
 import Link from 'next/link';
 import FormHead from '../main/FormHead';
 import Spinner from '@/components/commons/Spinner';
+import { useRouter } from 'next/navigation';
 
 type Props = {
     type: PostType;
@@ -23,9 +25,8 @@ type Props = {
 const Form: FC<Props> = ({ type, prevPrompt, prevTags, curPostId }) => {
 
     const { data } = useSession();
-    const session: SessionWithUserId = data; 
     const router = useRouter();
-  
+    const session: SessionWithUserId = data; 
     const { post, setPost, submitting, setSubmitting } = usePostContext();
     
     const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,86 +60,55 @@ const Form: FC<Props> = ({ type, prevPrompt, prevTags, curPostId }) => {
             toast.warn('#으로 태그를 시작해주세요');
             return;
         }
-    
-        switch(type) {
-            case 'create': createNewPost(); break;
-            case 'update': updatePost(); break;
-        }
-    }
 
-    const setTagsWithShop = (tags: string) => {
-        const tagsArray = tags.trim().toLowerCase().split('#').splice(1, post.tags.length);
-
-        return [...new Set(tagsArray)];
-    }
-
-    const createNewPost = async () => {
         setSubmitting(true);
+
         const _tags = setTagsWithShop(post.tags);
-     
+
         const postInfo: CreateNewPost = {
             prompt: post!.prompt.trim(),
             tags: _tags,
             _id: session?.user?._id!
         };     
+    
+        switch(type) {
+            case 'create':
+                try {
+                    await createNewPostAction(postInfo); 
+                    toast.success('Create new post successfully!');
+                } catch (error) {
+                    console.log(error);
+                    toast.error('Failed create new post.');
+                } finally {
+                    router.push('/');
+                }
 
-        try {
-            const data = await createNewPost_API(postInfo);
-
-            if (data) {
-                toast.success('Successfully create new post!');
-            } else {
-                toast.error('Failed new poost.');
-            }
+                break;
             
-        } catch (error) {
-            console.log(error);
-            toast.error('Failed new post.');
-        } finally { 
-            router.push('/');
-            router.refresh();
-            setSubmitting(false);  
-            setPost({ 
-                prompt: '',
-                tags: ''
-            });
-        }
-    }
+            case 'update':             
+                if (!curPostId) {
+                    toast.error('Not founded current post.');
+                    return;
+                }
 
-    const updatePost = async () => {
-        setSubmitting(true);
-        const _tags = setTagsWithShop(post.tags);
+                try {
+                    await updateMyPostAction(curPostId!, postInfo); 
+                    toast.success('Update exist post successfully!');            
+                } catch (error) {
+                    console.log(error);
+                    toast.error('Failed update exists post.');
+                } finally {
+                    router.push(`/profile/${session.user._id}`);
+                }
 
-        const updatePost: Partial<DBPost> = {
-            prompt: post!.prompt.trim(),
-            tags: _tags     
-        };
-
-        if (!curPostId) {
-            toast.error('Not founded current post.');
-            return;
+                break;            
         }
 
-        try {
-            const data = await updateMyPost_API(curPostId, updatePost);
-            
-            if (data.suc) {
-                toast.success('Update exist post successfully!');
-            } else {
-                toast.success('Failed update exist post.');
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Failed new Post.');
-        } finally {
-            router.push(`/profile/${session?.user?._id}`);
-            router.refresh();
-            setSubmitting(false);  
-            setPost({ 
-                prompt: '',
-                tags: ''
-            });
-        }
+        setSubmitting(false);  
+        setPost({ 
+            prompt: '',
+            tags: ''
+        });
     }
 
     useEffect(() => {
