@@ -35,7 +35,7 @@ const SearchForm: FC = () => {
         
         else if (searchTerm.length <= 1) {
             toast.info('Please input least 2 charaters...');
-
+         
             return;
         }
 

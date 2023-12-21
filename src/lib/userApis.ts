@@ -1,9 +1,11 @@
 import { DBUser } from '@/types/apiTypes';
-import axiosInst from './axiosInst';
+import { url } from './config';
+// import axiosInst from './axiosInst';
 
 export const getAllUsers_API = async () => {
     // const { data } = await axiosInst.get<{ users: DBUser[] }>('/user');
-    const response = await fetch(`http://localhost:3000/api/user`, {
+    
+    const response = await fetch(`${url}/user`, {
         method: 'GET',
     });
     const data = await response.json();
@@ -14,7 +16,7 @@ export const getAllUsers_API = async () => {
 export const getOneUser_API = async (_id: string) => {
     //const { data } = await axiosInst.get<{ user: DBUser }>(`/user/${_id}`);
 
-    const response = await fetch(`http://localhost:3000/api/user/${_id}`, {
+    const response = await fetch(`${url}/user/${_id}`, {
         method: 'GET',
     });
     const data = await response.json();

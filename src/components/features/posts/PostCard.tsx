@@ -72,8 +72,8 @@ const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt, up
             </Prompt>
             <p className='flex overflow-x-auto text-sm cursor-pointer gap-x-2 font-inter create_date'>
                 {
-                    tags.map((tag) => (
-                        <Tag key={tag} onClick={() => setSearchTag(tag)}>
+                    tags.map((tag, i) => (
+                        <Tag key={`${tag}-${i}`} onClick={() => setSearchTag(tag)}>
                             {tag}
                         </Tag>
                     ))

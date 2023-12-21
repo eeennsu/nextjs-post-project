@@ -1,10 +1,11 @@
 import type { CreateNewPost, DBPost, Post } from '@/types/postTypes';
-import axiosInst from './axiosInst';
+import { url } from './config';
+// import axiosInst from './axiosInst';
 
 // server
 export const getAllPosts_API = async () => {
     //const { data } =  await axiosInst.get<{ allPosts: DBPost[] }>('/post');
-    const response = await fetch('http://localhost:3000/api/post', { 
+    const response = await fetch(`${url}/post`, { 
         method: 'GET',
     });
 
@@ -21,7 +22,7 @@ export const getAllPosts_API = async () => {
 export const getMyPosts_API = async (_id: string) => {
     // const { data } = await axiosInst.get<{ myPosts: DBPost[] }>(`/user/posts/${_id}`);
 
-    const response = await fetch(`http://localhost:3000/api/user/posts/${_id}`, { 
+    const response = await fetch(`${url}/user/posts/${_id}`, { 
         method: 'GET' 
     });
 
@@ -38,7 +39,7 @@ export const getMyPosts_API = async (_id: string) => {
 export const getOnePost_API = async (_id: string) => { 
     // const { data } = await axiosInst.get<{ suc: boolean, post?: DBPost }>(`/post/${_id}`);
 
-    const response = await fetch(`http://localhost:3000/api/post/${_id}`, { 
+    const response = await fetch(`${url}/post/${_id}`, { 
         method: 'GET', 
         cache: 'no-store' 
     });
@@ -56,7 +57,7 @@ export const getOnePost_API = async (_id: string) => {
 export const createNewPost_API = async (postInfo: CreateNewPost) => {
     // const { data } = await axiosInst.post<{ newPost: DBPost }>('/post/new', postInfo);
 
-    const response = await fetch(`http://localhost:3000/api/post/new`, {
+    const response = await fetch(`${url}/post/new`, {
         method: 'POST',
         body: JSON.stringify(postInfo)
     });
@@ -70,7 +71,7 @@ export const createNewPost_API = async (postInfo: CreateNewPost) => {
 export const deleteMyPost_API = async (_id: string) => {
     // const { data } = await axiosInst.delete<{ suc: boolean; msg: string; }>(`/post/${_id}`);
 
-    const response = await fetch(`http://localhost:3000/api/post/${_id}`, {
+    const response = await fetch(`${url}/post/${_id}`, {
         method: 'DELETE',
     });
 
@@ -83,7 +84,7 @@ export const deleteMyPost_API = async (_id: string) => {
 export const updateMyPost_API = async (_id: string, updatedPost: Partial<DBPost>) => {
     // const { data } = await axiosInst.patch<{ suc: boolean; msg: string; }>(`/post/${_id}`, updatedPost);
 
-    const response = await fetch(`http://localhost:3000/api/post/${_id}`, {
+    const response = await fetch(`${url}/post/${_id}`, {
         method: 'PATCH',
         body: JSON.stringify(updatedPost)
     });
@@ -97,7 +98,7 @@ export const updateMyPost_API = async (_id: string, updatedPost: Partial<DBPost>
 export const searchPosts_API = async (type: string, term: string) => {
     // const { data } = await axiosInst.get<{ results: DBPost[] }>(`/post/search?type=${type}&term=${term}`);
 
-    const response = await fetch(`http://localhost:3000/api/post/search?type=${type}&term=${term}`, {
+    const response = await fetch(`${url}/post/search?type=${type}&term=${term}`, {
         method: 'GET',
     });
 
