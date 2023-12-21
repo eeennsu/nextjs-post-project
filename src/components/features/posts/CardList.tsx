@@ -39,7 +39,7 @@ const CardList: FC<Props> = ({ posts }) => {
             <div className='prompt_layout'>         
                 {
                     postResults && postResults.length >= 1 ? (
-                        postResults?.map((post) => (
+                        postResults.map((post) => (
                             <PostCard key={post._id} post={post} />
                         ))
                     ) : postResults?.length === 0 ? (
@@ -56,7 +56,3 @@ const CardList: FC<Props> = ({ posts }) => {
 }
 
 export default CardList;
-
-
-
-// export const revalidate = 60;

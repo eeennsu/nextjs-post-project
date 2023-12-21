@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { getMyPosts_API } from '@/lib/postApis';
 import { getAllUsers_API } from '@/lib/userApis';
 import Profile from '@/components/features/main/Profile';
+import { DBUser } from '@/types/apiTypes';
 
 type Props = {
     params: {
@@ -26,16 +27,16 @@ export default ProfilePage;
 
 
 
-export const generateStaticParams = async () => {
-    const { users } = await getAllUsers_API();
+export const revalidate = 0;
+// export const generateStaticParams = async () => {
+//     const response = await getAllUsers_API();
+//     const users = response.users as DBUser[];
 
-    if (!users) {
-        return [];
-    }
+//     if (!users) {
+//         return [];
+//     }
 
-    return users.map((user) => ({
-        _id: user._id
-    }));
-}
-
-export const revalidate = 10;
+//     return users.map((user) => ({
+//         _id: user._id
+//     }));
+// }

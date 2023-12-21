@@ -32,6 +32,12 @@ const SearchForm: FC = () => {
 
             return;
         }        
+        
+        else if (searchTerm.length <= 1) {
+            toast.info('Please input least 2 charaters...');
+
+            return;
+        }
 
         const { results } = await searchPosts_API(searchType, searchTerm);
         

@@ -1,7 +1,7 @@
 'use client';
 
-import type { DBPost } from '@/types/postTypes';
 import type { FC } from 'react';
+import type { DBPost } from '@/types/postTypes';
 import { useCardsContext } from '@/context/CardsProvider';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ type Props = {
     isDeleting?: boolean;
 }
 
-const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt }, handleEdit, handleDelete, isDeleting }) => {
+const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt, updatedAt }, handleEdit, handleDelete, isDeleting }) => {
 
     const isProfilePage = usePathname().startsWith('/profile');
     const { session } = useSessionWithUserId();
@@ -52,7 +52,7 @@ const PostCard: FC<Props> = ({ post: { _id, creator, prompt, tags, createdAt }, 
     return (
         <div className='prompt_card'>
             <div className='flex items-start justify-between gap-5 pb-4 border-b-2 border-b-gray-300/90'>
-                <CreatorInfo creator={creator} />
+                <CreatorInfo creator={creator} createdAt={createdAt} updatedAt={updatedAt} />
                 <div className={`copy_btn ${isCopyed && 'scale-125'}`} onClick={handleCopyPrompt}>
                     <Image 
                         src={

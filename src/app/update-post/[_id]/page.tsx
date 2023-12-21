@@ -22,3 +22,7 @@ const UpdatePostPage: NextPage<Props> = async ({ params: { _id } }) => {
 };
 
 export default UpdatePostPage;
+
+
+
+export const revalidate = 10;

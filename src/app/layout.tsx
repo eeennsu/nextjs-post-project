@@ -3,7 +3,6 @@ import type { PropsWithChildren } from 'react';
 import { ToastContainer } from 'react-toastify';
 import Header from '@/components/features/main/Header';
 import AuthProvider from '@/components/features/main/AuthProvider';
-import PostProvider from '@/context/PostProvider';
 import '@/styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import ContextProviders from '@/context/ContextProviders';

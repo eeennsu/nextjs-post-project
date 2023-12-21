@@ -21,3 +21,8 @@ const HomePage: NextPage = async () => {
 };
 
 export default HomePage;
+
+
+
+// export const runtime = 'edge';
+export const revalidate = 0;

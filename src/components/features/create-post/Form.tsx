@@ -67,7 +67,9 @@ const Form: FC<Props> = ({ type, prevPrompt, prevTags, curPostId }) => {
     }
 
     const setTagsWithShop = (tags: string) => {
-        return tags.trim().replaceAll(' ', '').split('#').splice(1, post.tags.length);
+        const tagsArray = tags.trim().toLowerCase().split('#').splice(1, post.tags.length);
+
+        return [...new Set(tagsArray)];
     }
 
     const createNewPost = async () => {
@@ -129,7 +131,7 @@ const Form: FC<Props> = ({ type, prevPrompt, prevTags, curPostId }) => {
             console.log(error);
             toast.error('Failed new Post.');
         } finally {
-            router.push('/');
+            router.push(`/profile/${session?.user?._id}`);
             router.refresh();
             setSubmitting(false);  
             setPost({ 
@@ -179,7 +181,7 @@ const Form: FC<Props> = ({ type, prevPrompt, prevTags, curPostId }) => {
                     />
                 </label>
                 <div className='gap-4 flex-end'>
-                    <Link href='/' className='form_buton bg-orange-200 hover:bg-orange-300'>
+                    <Link href='/' className='bg-orange-200 form_buton hover:bg-orange-300'>
                         Cancel
                     </Link>
                     {
