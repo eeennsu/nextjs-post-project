@@ -26,19 +26,20 @@ const ProfilePage: NextPage<Props> = async ({ params: { _id } }) => {
 export default ProfilePage;
 
 
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const generateStaticParams = async () => {
-    const response = await getAllUsers_API();
-    const users = response.users as DBUser[];
+// export const generateStaticParams = async () => {
+//     const response = await getAllUsers_API();
+//     const users = response.users as DBUser[];
 
-    if (!users) {
-        return [];
-    }
+//     if (!users) {
+//         return [];
+//     }
 
-    return users.map((user) => ({
-        _id: user._id
-    }));
-}
+//     return users.map((user) => ({
+//         _id: user._id
+//     }));
+// }
 
 
