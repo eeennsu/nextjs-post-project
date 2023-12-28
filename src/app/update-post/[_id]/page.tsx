@@ -25,4 +25,5 @@ export default UpdatePostPage;
 
 
 
+export const dynamic = 'force-dynamic';
 // export const revalidate = 10;

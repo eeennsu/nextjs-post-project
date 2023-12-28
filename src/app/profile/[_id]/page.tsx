@@ -7,7 +7,7 @@ import { DBUser } from '@/types/apiTypes';
 type Props = {
     params: {
         _id: string;
-    }
+    };
 }
 
 const ProfilePage: NextPage<Props> = async ({ params: { _id } }) => {
@@ -26,8 +26,8 @@ const ProfilePage: NextPage<Props> = async ({ params: { _id } }) => {
 export default ProfilePage;
 
 
-
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 export const generateStaticParams = async () => {
     const response = await getAllUsers_API();
     const users = response.users as DBUser[];
@@ -40,3 +40,5 @@ export const generateStaticParams = async () => {
         _id: user._id
     }));
 }
+
+

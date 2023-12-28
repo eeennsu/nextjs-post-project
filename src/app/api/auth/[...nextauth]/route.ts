@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
-import { connectToDB } from '@/db/db';
+import connectToDB from '@/db/db';
 import User from '@/models/User';
 
 const handler = NextAuth({
@@ -19,28 +19,20 @@ const handler = NextAuth({
     ],
     
     callbacks: {
-        session: async ({ session }) => {
-            try {
-                await connectToDB();
-                
-                const sessionUser = await User.findOne({ email: session.user?.email });
-            
-                const userWithId = {
-                    ...session.user,
-                    _id: sessionUser._id.toString()
-                };
-            
-                return {
-                    ...session,
-                    user: userWithId
-                };
-            } catch (error) {
-                console.log(error);
-                return session;
-            }
+        async session ({ session }) {     
+            const sessionUser = await User.findOne({ email: session.user?.email });
+        
+            const userWithId = {
+                ...session.user,
+                _id: sessionUser._id.toString()
+            };
+        
+            return {
+                ...session,
+                user: userWithId
+            };
         },
-
-        signIn: async ({ user }) => {
+        async signIn({ user }) {
             try {
                 await connectToDB();
 

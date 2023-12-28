@@ -1,9 +1,9 @@
 import type { NextRequest } from 'next/server';
 import type { DBPost } from '@/types/postTypes';
-import { connectToDB } from '@/db/db';
 import { NextResponse } from 'next/server';
 import Post from '@/models/Post';
 import User from '@/models/User';
+import connectToDB from '@/db/db';
 
 export async function GET(req: NextRequest) {
 

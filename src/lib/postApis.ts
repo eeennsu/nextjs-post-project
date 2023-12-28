@@ -7,17 +7,17 @@ export const getAllPosts_API = async () => {
     //const { data } =  await axiosInst.get<{ allPosts: DBPost[] }>('/post');
     const res = await fetch(`${url}/post`, { 
         method: 'GET',
-        cache: 'no-store'
+        cache: 'no-store',
     });
 
     const data = await res.json();
 
     if (!data) {
-        throw new Error('Faied to get all posts.');
+        throw new Error('Failed to get all posts.');
     }
 
     return data;
-};
+}
 
 // server
 export const getMyPosts_API = async (_id: string) => {
@@ -34,7 +34,7 @@ export const getMyPosts_API = async (_id: string) => {
     }
 
     return data;
-};
+}
 
 // server
 export const getOnePost_API = async (_id: string) => { 
@@ -66,7 +66,7 @@ export const createNewPost_API = async (postInfo: CreateNewPost) => {
     const data = await res.json();
 
     return data;
-};
+}
 
 // client 서버 액션으로 이동
 // export const deleteMyPost_API = async (_id: string) => {

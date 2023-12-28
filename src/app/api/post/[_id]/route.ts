@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import type { DBPost } from '@/types/postTypes';
 import { NextResponse } from 'next/server';
-import { connectToDB } from '@/db/db';
+import connectToDB from '@/db/db';
 import Post from '@/models/Post';
 
 type Props = {

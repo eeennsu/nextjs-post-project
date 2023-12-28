@@ -1,25 +1,23 @@
 import mongoose from 'mongoose';
 
-let isConnected: boolean = false;
+const MONGO_URL = process.env.MONGO_DB_URL;
 
-export const connectToDB = async () => {
-    mongoose.set('strictQuery', true);
+let cached = (global as any).mongoose || { connected: null, promise: null };
 
-    // 이미 연결되어 있으면 종료
-    if (isConnected) {
-        console.log('MongoDB is already connected.');
-        
-        return;
-    }
 
-    try {
-        await mongoose.connect(process.env.MONGO_DB_URL as string, {
-            dbName: 'NextJs-post',
-        });
 
-        isConnected = true;
-        console.log('Mongo db connected successfully!');
-    } catch (error) {
-        console.log(error);
-    }
+export default async function connectToDB(){
+
+    if (cached.connected) return cached.connected;
+
+    if (!MONGO_URL) throw new Error('MONGO_URL is missing.');
+
+    cached.promise = cached.promise || mongoose.connect(MONGO_URL, {
+        dbName: 'NextJs-post',
+        bufferCommands: false,
+    })
+
+    cached.connected = await cached.promise;
+
+    return cached.connected;
 }
