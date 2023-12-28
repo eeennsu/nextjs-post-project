@@ -7,7 +7,6 @@ export const getAllPosts_API = async () => {
     //const { data } =  await axiosInst.get<{ allPosts: DBPost[] }>('/post');
     const res = await fetch(`${url}/post`, { 
         method: 'GET',
-        cache: 'no-store',
     });
 
     const data = await res.json();
