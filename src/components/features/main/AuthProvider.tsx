@@ -11,7 +11,7 @@ type Props = {
 const AuthProvider: FC<PropsWithChildren<Props>> = ({ children, session }) => {
 
     return (
-        <SessionProvider baseUrl='/api/auth' session={session}>
+        <SessionProvider session={session}>
             {children}
         </SessionProvider>
     );
