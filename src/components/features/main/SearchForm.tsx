@@ -1,10 +1,11 @@
 'use client';
 
 import type { FC, ChangeEvent, FormEvent } from 'react';
+import type { SearchSelect } from '@/context/PostProvider';
 import { useCardsContext } from '@/context/CardsProvider';
 import { toast } from 'react-toastify';
 import { searchPosts_API } from '@/lib/postApis';
-import { type SearchSelect, usePostContext } from '@/context/PostProvider';
+import { usePostContext } from '@/context/PostProvider';
 import { FcSearch } from "react-icons/fc";
 
 const SearchForm: FC = () => {
